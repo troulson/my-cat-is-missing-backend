@@ -10,3 +10,4 @@ cdk.out
 /.idea/
 /src/package-lock.json
 /docker/
+/init/package-lock.json

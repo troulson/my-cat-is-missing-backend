@@ -13,6 +13,7 @@ export class MyCatIsMissingFrontendDeploymentStack extends cdk.Stack {
             publicReadAccess: true,
             removalPolicy: cdk.RemovalPolicy.DESTROY,
             websiteErrorDocument: "index.html",
+            websiteIndexDocument: "index.html",
             blockPublicAccess: BlockPublicAccess.BLOCK_ACLS,
             accessControl: BucketAccessControl.BUCKET_OWNER_FULL_CONTROL
         });

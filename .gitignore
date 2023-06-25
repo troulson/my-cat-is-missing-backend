@@ -8,3 +8,4 @@ node_modules
 cdk.out
 /package-lock.json
 /.idea/
+/src/package-lock.json

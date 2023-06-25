@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  postgresql-local:
+    image: postgres:14.1-alpine
+    restart: always
+    container_name: postgresql-local
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - "./docker/postgresql:/home/postgresqllocal/data"
+    working_dir: /home/postgresqllocal
+    user: root
+    networks:
+      - backend
+
+networks:
+  backend:
+    name: sam-backend

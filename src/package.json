@@ -8,7 +8,11 @@
   },
   "author": "Thomas Roulson",
   "license": "ISC",
+  "dependencies": {
+    "pg": "^8.10.0"
+  },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.119"
+    "@types/aws-lambda": "^8.10.119",
+    "@types/pg": "^8.6.6"
   }
 }

@@ -11,7 +11,8 @@ export class Config {
 
     static RDS: any = {
         // Endpoint
-        HOST: 'mycatismissingbackendstack-dbinstance9e2e5045-sozt7u7nvsvr.cayj132ybe9x.us-east-1.rds.amazonaws.com',
+        // Again, never have expose database credentials in production.
+        HOST: 'mycatismissingbackendstack-dbinstance9e2e5045-ex8cnpwe1ghl.cayj132ybe9x.us-east-1.rds.amazonaws.com',
         PORT: 5432,
         USER: 'postgres',   // Database username
         PASSWORD: 'Q5xtBNrQu3jC',

@@ -43,10 +43,10 @@ export class MyCatIsMissingBackendStack extends cdk.Stack {
 
         const imageBucket = new s3.Bucket(this, 'McimImageBucket', {
             bucketName: "mcim-image-bucket",
-            removalPolicy: cdk.RemovalPolicy.RETAIN,
+            removalPolicy: cdk.RemovalPolicy.DESTROY,
             versioned: true,
             publicReadAccess: true,
-            //blockPublicAccess: BlockPublicAccess.BLOCK_ACLS,
+            blockPublicAccess: BlockPublicAccess.BLOCK_ACLS,
         });
 
         // Security group for lambda functions

@@ -32,6 +32,7 @@ export class Report {
 
     }
 
+    // Creates a report object and deploys it to RDS upon passing validation.
     public static async create(form: any) {
 
         const catName = validateStringNotEmpty(form.catName ?? '', '', () => {
@@ -75,6 +76,7 @@ export class Report {
         return report.id;
     }
 
+    // Deploys the report to RDS.
     private async deploy() {
         const client = await Database.Connection();
 
@@ -96,4 +98,53 @@ export class Report {
 
         await client.query(query);
     }
+
+    public static async retrieve(id: string) {
+
+        const query = {
+            text: 'SELECT * FROM report WHERE report_id = $1',
+            values: [id]
+        }
+
+        const client = await Database.Connection();
+        const result = await client.query(query);
+
+        if (result.rowCount === 0) {
+            throw new ApiError('Report with UUID \'' + id + '\' does not exist', 404);
+        }
+
+        return await this.constructFromDatabaseRecord(result.rows[0]);
+
+    }
+
+    private static async constructFromDatabaseRecord(record: any) {
+
+        return new this(
+            record.report_id,
+            record.image_location,
+            record.cat_name,
+            record.content,
+            record.country,
+            record.town,
+            moment(record.missing_since),
+            record.email,
+            moment(record.created)
+        );
+    }
+
+    public getFormattedAttributes() {
+
+        return {
+            id: this.id,
+            imageLocation: this.imageLocation,
+            catName: this.catName,
+            content: this.content,
+            country: this.country,
+            town: this.town,
+            missingSince: this.missingSince.format('YYYY-MM-DD'),
+            email: this.email,
+            created: this.created.format('Do MMMM LT')
+        }
+    }
+
 }

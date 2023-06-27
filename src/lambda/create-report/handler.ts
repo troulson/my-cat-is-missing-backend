@@ -10,38 +10,7 @@ export const handler = async (event: any) => {
     let statusCode: number = 200;
     let body: any = {};
 
-    body.image = formData.image;
 
-    const s3 = new aws.S3();
-
-    const base64Data = Buffer.from(formData.image.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-    const type = formData.image.split(';')[0].split('/')[1];
-
-    const params = {
-        Bucket: 'mcim-image-bucket',
-        Key: `hello.${type}`, // type is not required
-        Body: base64Data,
-        //ACL: 'public-read',
-        ContentEncoding: 'base64', // required
-        ContentType: `image/${type}` // required. Notice the back ticks
-    }
-
-    console.log(JSON.stringify(params));
-
-    let location = '';
-    let key = '';
-
-    await new Promise<void>((resolve, reject) => {
-        s3.upload(params, (err: any) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        })
-    });
-
-    console.log('Done');
 
     return {
         "statusCode": statusCode,

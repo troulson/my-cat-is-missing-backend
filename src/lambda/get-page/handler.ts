@@ -1,4 +1,5 @@
 import {Database} from "../../model/database";
+import {Report} from "../../model/report";
 
 export const handler = async (event: any) => {
 
@@ -7,7 +8,13 @@ export const handler = async (event: any) => {
     let statusCode: number = 200;
     let body: any = {};
 
-    body.test = 'Hello, world!';
+    try {
+        body = await Report.retrievePage();
+
+    } catch (error: any) {
+        body = error.message;
+        statusCode = error.statusCode;
+    }
 
     return {
         "statusCode": statusCode,

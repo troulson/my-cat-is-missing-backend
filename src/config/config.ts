@@ -18,4 +18,6 @@ export class Config {
         PASSWORD: 'Q5xtBNrQu3jC',
         DATABASE: 'mycatismissing'
     }
+
+    static REPORTS_PER_PAGE: number = 12;
 }

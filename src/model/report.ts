@@ -4,6 +4,7 @@ import {aws_pinpointemail} from "aws-cdk-lib";
 import {validateEmailAddress, validatePastDateString, validateStringNotEmpty} from "../util/validation";
 import {ApiError} from "../error/api-error";
 import {v4 as UUIDv4} from "uuid";
+import {Config} from "../config/config";
 
 export class Report {
     private id: string;
@@ -114,7 +115,28 @@ export class Report {
         }
 
         return await this.constructFromDatabaseRecord(result.rows[0]);
+    }
 
+    // Retrieves the page with the latest missing cats.
+    public static async retrievePage() {
+
+        const query = {
+            text: 'SELECT * FROM report ORDER BY created DESC LIMIT $1',
+            values: [Config.REPORTS_PER_PAGE]
+        }
+
+        const client = await Database.Connection();
+        const result = await client.query(query);
+
+        const reports: Array<any> = new Array<Report>();
+
+        for (let row of result.rows) {
+            let report = await this.constructFromDatabaseRecord(row);
+
+            reports.push(report.getFormattedAttributes());
+        }
+
+        return reports;
     }
 
     private static async constructFromDatabaseRecord(record: any) {

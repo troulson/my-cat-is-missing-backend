@@ -6,8 +6,10 @@ import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as rds from "aws-cdk-lib/aws-rds";
 import {SubnetType} from "aws-cdk-lib/aws-ec2";
 import {DockerImageCode} from "aws-cdk-lib/aws-lambda";
-import {Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
+import {ArnPrincipal, PolicyStatement, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
 import {AwsCustomResource, AwsCustomResourcePolicy, AwsSdkCall, PhysicalResourceId} from "aws-cdk-lib/custom-resources";
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import {BlockPublicAccess} from "aws-cdk-lib/aws-s3";
 
 export class MyCatIsMissingBackendStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -39,6 +41,14 @@ export class MyCatIsMissingBackendStack extends cdk.Stack {
             ],
         });
 
+        const imageBucket = new s3.Bucket(this, 'McimImageBucket', {
+            bucketName: "mcim-image-bucket",
+            removalPolicy: cdk.RemovalPolicy.RETAIN,
+            versioned: true,
+            publicReadAccess: true,
+            //blockPublicAccess: BlockPublicAccess.BLOCK_ACLS,
+        });
+
         // Security group for lambda functions
         const lambdaSecurityGroup = new ec2.SecurityGroup(this, 'LambdaSecurityGroup', {
             vpc,
@@ -51,11 +61,13 @@ export class MyCatIsMissingBackendStack extends cdk.Stack {
             handler: './lambda/create-report/handler.handler',
             runtime: lambda.Runtime.NODEJS_18_X,
             memorySize: 128,
-            timeout: cdk.Duration.seconds(10),
+            timeout: cdk.Duration.seconds(30),
             vpc,
             vpcSubnets: {subnetType: SubnetType.PRIVATE_WITH_EGRESS},
             securityGroups: [lambdaSecurityGroup]
         });
+
+        imageBucket.grantReadWrite(createReportLambda);
 
         // Get page lambda function
         const getPageLambda = new lambda.Function(this, 'GetPageLambda', {

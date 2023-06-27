@@ -9,7 +9,10 @@
   "author": "Thomas Roulson",
   "license": "ISC",
   "dependencies": {
-    "pg": "^8.10.0"
+    "aws-multipart-parser": "^0.2.1",
+    "aws-sdk": "^2.1404.0",
+    "pg": "^8.10.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.119",

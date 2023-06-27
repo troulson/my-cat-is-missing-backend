@@ -1,22 +1,11 @@
 CREATE TABLE IF NOT EXISTS report (
     report_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    image_location VARCHAR(512) NOT NULL,
     cat_name VARCHAR(255) NOT NULL,
     content VARCHAR(1024) NOT NULL,
     country VARCHAR(255) NOT NULL,
     town VARCHAR(255) NOT NULL,
     missing_since DATE NOT NULL,
-    mobile VARCHAR(15) DEFAULT NULL,
     email VARCHAR(320) DEFAULT NULL,
     created TIMESTAMP NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS image (
-    image_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    report_id UUID NOT NULL,
-    location VARCHAR(255) NOT NULL,
-    is_primary BOOLEAN NOT NULL,
-    CONSTRAINT fk_address
-        FOREIGN KEY (report_id)
-            REFERENCES report (report_id)
-            ON DELETE CASCADE
 );
